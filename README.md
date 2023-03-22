@@ -395,6 +395,7 @@ Następnie za pomocą ```rsync``` kopiuję plik ```LinEnum.sh``` i jak już zalo
 sys-internal@vulnnet-internal:~$ ./LinEnum.sh -r raport.txt -e .
 ```
 ![coś_poszło_nie_tak](/screens/v_po_przerzuceniu_LinEnum.png)
+
 5. Po przejrzeniu raportu zaczyna interesować mnie usługa ```TimeCity```. Szperając po katalogach trafiam na katalog ```TimeCity``` i przyglądam mu się dokładniej.
 ```
 TeamCity to narzędzie które wspiera budowanie i wdrażanie różnego rodzaju projektów. Po instalacji dostęp do internetowego interfejsu użytkownika TeamCity można uzyskać za pośrednictwem przeglądarki internetowej.
