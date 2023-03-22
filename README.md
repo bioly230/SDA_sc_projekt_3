@@ -70,7 +70,9 @@ gobuster vhost -u http://ip-10-200-111-33.eu-west-1.compute.internal:80/ -wlist_
 ## Maszyna [VulnNet: Internal:](https://tryhackme.com/room/vulnnetinternal)
 ![Ups...](/screens/v_wstep.jpg)
 
-    UWAGA: Adresy IP maszyny atakowanej będą się różnić na zrzutach ekranu gdyż były tworzone podczas krótkich sesii a nie pojedyńczego rozwiązania tego pokoju.
+    UWAGA: 
+    Adresy IP maszyny atakowanej będą się różnić na zrzutach ekranu gdyż 
+    było tworzone podczas krótkich sesii a nie pojedyńczego rozwiązania tego pokoju.
 
 1. Na początek zaczynam od użycia narzędzia nmap.
 
