@@ -394,13 +394,13 @@ Następnie za pomocą ```rsync``` kopiuję plik ```LinEnum.sh``` i jak już zalo
 
 sys-internal@vulnnet-internal:~$ ./LinEnum.sh -r raport.txt -e .
 ```
-![coś_poszło_nie_tak](/screens/v_po_przerzuceniu_LinEnum.png)
+![coś_poszło_nie_tak](/screens/v_katalog_TC.png)
 
 5. Po przejrzeniu raportu zaczyna interesować mnie usługa ```TimeCity```. Szperając po katalogach trafiam na katalog ```TimeCity``` i przyglądam mu się dokładniej.
 ```
 TeamCity to narzędzie które wspiera budowanie i wdrażanie różnego rodzaju projektów. Po instalacji dostęp do internetowego interfejsu użytkownika TeamCity można uzyskać za pośrednictwem przeglądarki internetowej.
 ```
-![ups!!!](/screens/v_kat_tc.png)
+![ups!!!](/screens/v_katalog_TC.png)
 Sprawdzenie gniazd sieciowych ujawnia, że ​​usługa jest uruchomiona dla hosta lokalnego na porcie 8111, który jest prawdopodobnie używany przez TeamCity. Sprawdziłem to poleceniem:
 ```
 sys-internal@vulnnet-internal:/TeamCity$ ss -ltp
