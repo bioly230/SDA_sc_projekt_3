@@ -333,6 +333,35 @@ Uzyskuję możliwość logowania za pomocą ```rsync```.
 ![:(](/screens/v_hashes.png)
 
 4. Rsync - po zalogowaniu się okazało się, że możemy zobaczyć plik txt z kolejną flagą ale nie miałem pomysłu jak mogę go pobrać lub otworzyć. W rozwiązaniu tego plroblemu bardzo pomocny okazał się [ChatGPT](https://chat.openai.com/chat). Pobralem załą zawartość do której dawał mi dostęp ```rsync```. Po pobraniu katalogu ```files``` za pomocą polecenia ```sudo chmod -R 777 sys-internal``` zmieniłem uprawnienia dla wszystkich plików. W ten sposób zdobyłem kolejna flage.
+![UPs...](/screens/v_pytanie_chatgpt_o_pobieranie_przez_rsync.gif)
+
+Ja:
+jak za pomocą polecenia rsync pobrać katalog?
+
+ChatGPT:
+Aby pobrać katalog za pomocą polecenia rsync, wykonaj następujące kroki:
+
+Otwórz terminal lub konsolę.
+
+Wpisz polecenie rsync, a następnie podaj lokalizację źródłową i docelową. Na przykład, jeśli chcesz pobrać katalog o nazwie "folder" z serwera zdalnego do bieżącego katalogu lokalnego, wpisz:
+
+```
+rsync -avz username@remote_host:/path/to/folder/ .
+```
+W powyższym poleceniu:
+-a oznacza tryb archiwum, co oznacza, że ​​rsync będzie zachowywał właściwości plików, takie jak uprawnienia, daty itp.
+-v oznacza tryb verbose, co oznacza, że ​​rsync będzie wyświetlał szczegółowe informacje o operacji kopiowania.
+-z oznacza tryb kompresji, co oznacza, że ​​rsync będzie kompresował dane przed ich przesłaniem, co może zmniejszyć czas transferu danych.
+Zastąp "username" nazwą użytkownika na serwerze zdalnym i "remote_host" adresem IP lub nazwą hosta serwera zdalnego.
+
+Zastąp "/path/to/folder/" ścieżką do katalogu na serwerze zdalnym, który chcesz pobrać.
+
+Znak "." na końcu oznacza bieżący katalog lokalny jako miejsce docelowe, gdzie zostanie pobrany katalog.
+
+Wpisz hasło, jeśli zostaniesz o to poproszony, aby potwierdzić swoją tożsamość na serwerze zdalnym.
+
+Po wykonaniu powyższych kroków, rsync pobierze katalog z serwera zdalnego do bieżącego katalogu lokalnego.
+
 ```                              
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
 └─$ rsync --list-only rsync://rsync-connect@<IP_atakowanej_masz>/files/sys-internal
