@@ -425,6 +425,101 @@ sys-internal@vulnnet-internal:~$ ./LinEnum.sh -r raport.txt -e .
 ```
 ![coś_poszło_nie_tak](/screens/v_katalog_TC.png)
 
+Po utworzeniu raportu z aktywnymi usługami za pomocą ```LinEnum``` pobieram go na swoją maszynę. Następnie przeglądam ten raport i znajduję informację o uruchomionej usłudze ```TimeCity``` na uprawnieniach ```root```
+```
+┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
+└─$ cat raportLinEnum.txt | grep -A100 -i services | grep root
+root         1  0.0  0.3 159568  7664 ?        Ss   10:55   0:01 /sbin/init splash
+root         2  0.0  0.0      0     0 ?        S    10:55   0:00 [kthreadd]
+root         4  0.0  0.0      0     0 ?        I<   10:55   0:00 [kworker/0:0H]
+root         6  0.0  0.0      0     0 ?        I<   10:55   0:00 [mm_percpu_wq]
+root         7  0.0  0.0      0     0 ?        S    10:55   0:00 [ksoftirqd/0]
+root         8  0.0  0.0      0     0 ?        I    10:55   0:01 [rcu_sched]
+root         9  0.0  0.0      0     0 ?        I    10:55   0:00 [rcu_bh]
+root        10  0.0  0.0      0     0 ?        S    10:55   0:00 [migration/0]
+root        11  0.0  0.0      0     0 ?        S    10:55   0:00 [watchdog/0]
+root        12  0.0  0.0      0     0 ?        S    10:55   0:00 [cpuhp/0]
+root        13  0.0  0.0      0     0 ?        S    10:55   0:00 [kdevtmpfs]
+root        14  0.0  0.0      0     0 ?        I<   10:55   0:00 [netns]
+root        15  0.0  0.0      0     0 ?        S    10:55   0:00 [rcu_tasks_kthre]
+root        16  0.0  0.0      0     0 ?        S    10:55   0:00 [kauditd]
+root        17  0.0  0.0      0     0 ?        S    10:55   0:00 [xenbus]
+root        18  0.0  0.0      0     0 ?        S    10:55   0:00 [xenwatch]
+root        19  0.0  0.0      0     0 ?        I    10:55   0:00 [kworker/0:1]
+root        20  0.0  0.0      0     0 ?        S    10:55   0:00 [khungtaskd]
+root        21  0.0  0.0      0     0 ?        S    10:55   0:00 [oom_reaper]
+root        22  0.0  0.0      0     0 ?        I<   10:55   0:00 [writeback]
+root        23  0.0  0.0      0     0 ?        S    10:55   0:00 [kcompactd0]
+root        24  0.0  0.0      0     0 ?        SN   10:55   0:00 [ksmd]
+root        25  0.0  0.0      0     0 ?        SN   10:55   0:00 [khugepaged]
+root        26  0.0  0.0      0     0 ?        I<   10:55   0:00 [crypto]
+root        27  0.0  0.0      0     0 ?        I<   10:55   0:00 [kintegrityd]
+root        28  0.0  0.0      0     0 ?        I<   10:55   0:00 [kblockd]
+root        29  0.0  0.0      0     0 ?        I<   10:55   0:00 [ata_sff]
+root        30  0.0  0.0      0     0 ?        I<   10:55   0:00 [md]
+root        31  0.0  0.0      0     0 ?        I<   10:55   0:00 [edac-poller]
+root        32  0.0  0.0      0     0 ?        I<   10:55   0:00 [devfreq_wq]
+root        33  0.0  0.0      0     0 ?        I<   10:55   0:00 [watchdogd]
+root        36  0.0  0.0      0     0 ?        S    10:55   0:01 [kswapd0]
+root        37  0.0  0.0      0     0 ?        I<   10:55   0:00 [kworker/u31:0]
+root        38  0.0  0.0      0     0 ?        S    10:55   0:00 [ecryptfs-kthrea]
+root        80  0.0  0.0      0     0 ?        I<   10:55   0:00 [kthrotld]
+root        81  0.0  0.0      0     0 ?        I<   10:55   0:00 [acpi_thermal_pm]
+root        82  0.0  0.0      0     0 ?        S    10:55   0:00 [scsi_eh_0]
+root        83  0.0  0.0      0     0 ?        I<   10:55   0:00 [scsi_tmf_0]
+root        84  0.0  0.0      0     0 ?        S    10:55   0:00 [scsi_eh_1]
+root        85  0.0  0.0      0     0 ?        I<   10:55   0:00 [scsi_tmf_1]
+root        91  0.0  0.0      0     0 ?        I<   10:55   0:00 [ipv6_addrconf]
+root       100  0.0  0.0      0     0 ?        I<   10:55   0:00 [kstrp]
+root       117  0.0  0.0      0     0 ?        I<   10:55   0:00 [charger_manager]
+root       177  0.0  0.0      0     0 ?        I    10:55   0:00 [kworker/0:2]
+root       178  0.0  0.0      0     0 ?        I<   10:55   0:00 [ttm_swap]
+root       198  0.0  0.0      0     0 ?        S    10:55   0:00 [jbd2/xvda1-8]
+root       199  0.0  0.0      0     0 ?        I<   10:55   0:00 [ext4-rsv-conver]
+root       225  0.0  0.0      0     0 ?        I<   10:56   0:00 [kworker/0:1H]
+root       237  0.0  0.6  94788 12628 ?        S<s  10:56   0:00 /lib/systemd/systemd-journald
+root       255  0.0  0.0      0     0 ?        I<   10:56   0:00 [rpciod]
+root       256  0.0  0.0      0     0 ?        I<   10:56   0:00 [xprtiod]
+root       258  0.0  0.0  23920   176 ?        Ss   10:56   0:00 /usr/sbin/blkmapd
+root       263  0.0  0.2  47808  5592 ?        Ss   10:56   0:00 /lib/systemd/systemd-udevd
+root       315  0.0  0.0  23748   196 ?        Ss   10:56   0:00 /usr/sbin/rpc.idmapd
+root       337  0.0  0.1  47600  2788 ?        Ss   10:56   0:00 /sbin/rpcbind -f -w
+root       361  0.0  0.2 427260  5116 ?        Ssl  10:56   0:00 /usr/sbin/ModemManager
+root       365  0.0  0.2  70580  5124 ?        Ss   10:56   0:00 /lib/systemd/systemd-logind
+root       366  0.0  0.0   4552   728 ?        Ss   10:56   0:00 /usr/sbin/acpid
+root       367  0.0  0.1  14252  2324 ?        Ss   10:56   0:00 /usr/bin/rsync --daemon --no-detach
+root       370  0.0  0.2 287624  5404 ?        Ssl  10:56   0:00 /usr/lib/accountsservice/accounts-daemon
+root       372  0.0  0.2 473240  6000 ?        Ssl  10:56   0:00 /usr/lib/udisks2/udisksd
+avahi      388  0.0  0.0  47076   340 ?        S    10:56   0:00 avahi-daemon: chroot helper
+root       486  0.0  0.1  31320  2688 ?        Ss   10:56   0:00 /usr/sbin/cron -f
+root       487  0.0  0.1  45224  3692 ?        Ss   10:56   0:00 /sbin/wpa_supplicant -u -s -O /run/wpa_supplicant
+root       491  0.0  0.7 170376 14580 ?        Ssl  10:56   0:00 /usr/bin/python3 /usr/bin/networkd-dispatcher
+root       492  0.0  0.4 406680  9884 ?        Ssl  10:56   0:00 /usr/sbin/NetworkManager --no-daemon
+root       494  0.0  0.2 100572  5000 ?        Ss   10:56   0:00 /usr/sbin/cupsd -l
+root       496  0.0  0.3 292908  7164 ?        Ssl  10:56   0:00 /usr/lib/policykit-1/polkitd --no-debug
+root       521  0.0  0.0  38068   748 ?        Ss   10:56   0:00 /usr/sbin/rpc.mountd --manage-gids
+root       530  0.0  0.0      0     0 ?        S    10:56   0:00 [lockd]
+root       533  0.0  0.0      0     0 ?        S    10:56   0:00 [nfsd]
+root       534  0.0  0.0      0     0 ?        S    10:56   0:00 [nfsd]
+root       535  0.0  0.0      0     0 ?        S    10:56   0:00 [nfsd]
+root       536  0.0  0.0      0     0 ?        S    10:56   0:00 [nfsd]
+root       537  0.0  0.0      0     0 ?        S    10:56   0:00 [nfsd]
+root       538  0.0  0.0      0     0 ?        S    10:56   0:00 [nfsd]
+root       539  0.0  0.0      0     0 ?        S    10:56   0:00 [nfsd]
+root       540  0.0  0.0      0     0 ?        S    10:56   0:00 [nfsd]
+root       554  0.0  0.2 364220  5284 ?        Ssl  10:56   0:00 /usr/sbin/lightdm
+root       561  0.0  0.0   4628   872 ?        S    10:56   0:00 sh teamcity-server.sh _start_internal
+root       573  0.0  0.0   4752  1824 ?        S    10:56   0:00 sh /TeamCity/bin/teamcity-server-restarter.sh run
+root       583  0.0  0.2  72296  5548 ?        Ss   10:56   0:00 /usr/sbin/sshd -D
+root       585  0.0  0.5 265348 10428 ?        Ss   10:56   0:00 /usr/sbin/nmbd --foreground --no-process-group
+root       590  0.0  0.6 646172 12236 ?        Ssl  10:56   0:00 /usr/bin/amazon-ssm-agent
+root       613  0.0  0.0  15956  1924 ttyS0    Ss+  10:56   0:00 /sbin/agetty -o -p -- \u --keep-baud 115200,38400,9600 ttyS0 vt220
+root       614  0.0  1.1 332956 23480 tty7     Ssl+ 10:56   0:00 /usr/lib/xorg/Xorg -core :0 -seat seat0 -auth /var/run/lightdm/root/:0 -nolisten tcp vt7 -novtswitch
+root       615  0.0  0.0  16180  1788 tty1     Ss+  10:56   0:00 /sbin/agetty -o -p -- \u --noclear tty1 linux
+root       634  0.0  0.6 356692 13260 ?        Ss   10:56   0:00 /usr/sbin/smbd --foreground --no-process-group
+```
+![ZZZzzz...](/screens/v_rapport_linenum.png)
+
 5. Po przejrzeniu raportu zaczyna interesować mnie usługa ```TimeCity```. Szperając po katalogach trafiam na katalog ```TimeCity``` i przyglądam mu się dokładniej.
 ```
 TeamCity to narzędzie które wspiera budowanie i wdrażanie różnego rodzaju projektów. Po instalacji dostęp do internetowego interfejsu użytkownika TeamCity można uzyskać za pośrednictwem przeglądarki internetowej.
