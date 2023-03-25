@@ -548,6 +548,7 @@ sys-internal@vulnnet-internal:/TeamCity$ grep -iR token /TeamCity/logs/ 2>/dev/n
 ![...](/screens/v_token_tc.png)
 
 6. Za pomocą przekierowania ```ssh``` poleceniem ```ssh -i id_rsa -L 4444:localhost:8111 sys-internal@<IP_atakowanej_maszyny>``` przekierowałem pracę "lokalnego hosta" atakowanej maszyny na stój lokalny host.
+
 ![Oops!…I_Did_It_Again](/screens/v_przekierowanie_ssh.png)
 
 Następnie w przeglądarce ppisuję ```http://127.0.0.1:4444/``` i pojawia się możliwość logowania. Zauwarzam możliwość logowania za pomocą użytkownika ```superuser```, tam wykorzystuję znaleziony wcześniej ```token``` w pliku ```catalina.out``` w katalogu ```/TeamCity/log```.
