@@ -66,7 +66,6 @@ Następnie zgodnie z zaleceniem wykonuję enumerację za pomocą ```GoBuster ```
 gobuster vhost -u http://ip-10-200-111-33.eu-west-1.compute.internal:80/ -wlist_task9.txt
 ```
 
-# To be countinued...
 
 ## Maszyna [VulnNet: Internal:](https://tryhackme.com/room/vulnnetinternal)
 ![Ups...](/screens/v_wstep.jpg)
@@ -411,7 +410,6 @@ sys-internal@vulnnet-internal:~$ ./LinEnum.sh -r raport.txt -e .
 ![coś_poszło_nie_tak](/screens/v_katalog_TC.png)
 
 Po utworzeniu raportu z aktywnymi usługami za pomocą ```LinEnum``` pobieram go na swoją maszynę. Następnie przeglądam ten raport i znajduję informację o uruchomionej usłudze ```TimeCity``` na uprawnieniach ```root```
-[](/screens/v_LinEnum_raport.png)
 ```
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
 └─$ cat raportLinEnum.txt | grep -A100 -i services | grep root
