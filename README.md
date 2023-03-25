@@ -317,6 +317,7 @@ Uzyskuję możliwość logowania za pomocą ```rsync```.
 ![:(](/screens/v_hashes.png)
 
 4. Rsync - po zalogowaniu się okazało się, że możemy zobaczyć plik txt z kolejną flagą ale nie miałem pomysłu jak mogę go pobrać lub otworzyć. W rozwiązaniu tego plroblemu bardzo pomocny okazał się [ChatGPT](https://chat.openai.com/chat). Pobrałem całą zawartość do której dawał mi dostęp ```rsync```. Po pobraniu katalogu ```files``` za pomocą polecenia ```sudo chmod -R 777 sys-internal``` zmieniłem uprawnienia dla wszystkich plików. W ten sposób zdobyłem kolejną flage.
+
 ![UPs...](/screens/v_pytanie_chatgpt_o_pobieranie_przez_rsync.gif)
 
 Ja:
@@ -557,10 +558,10 @@ Następnie w przeglądarce ppisuję ```http://127.0.0.1:4444/``` i pojawia się 
 
 Następnie tworze nowy projetk. Po stworzeniu go szukam możliwości wykonania kodu, rozgladając się po ```stettings```, zamykając projekt i potwierając go z zakładki górnrj ```Projects``` znajduję poszukiwaną możliwość w zakładce bocznej ```Build Steps```. Dzieki narzędziu [revshells.com](https://www.revshells.com/) stworzyłem kod zwracający mi odwróconą powłokę z możliwością wejścia do katalogu ```root``` tam znajduje się flaga ```root.txt```.
 
-[Loading...](/screens/v_okno_do_logowania_TC.png)
-[cierpliwosci](/screens/v_TC_po_zalogowaniu.png)
-[](/screens/v_reverseshell.png)
-[](/screens/v_wykonanie_reverseshell.png)
+![Loading...](/screens/v_okno_do_logowania_TC.png)
+![cierpliwosci](/screens/v_TC_po_zalogowaniu.png)
+![](/screens/v_reverseshell.png)
+![](/screens/v_wykonanie_reverseshell.png)
 
 ```
 ┌──(kali㉿kali)-[~]
