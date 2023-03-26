@@ -319,7 +319,7 @@ Uzyskuję możliwość logowania za pomocą ```rsync```.
 4. Rsync - po zalogowaniu się okazało się, że możemy zobaczyć plik txt z kolejną flagą ale nie miałem pomysłu jak mogę go pobrać lub otworzyć. W rozwiązaniu tego plroblemu bardzo pomocny okazał się [ChatGPT](https://chat.openai.com/chat). Pobrałem całą zawartość do której dawał mi dostęp ```rsync```. Po pobraniu katalogu ```files``` za pomocą polecenia ```sudo chmod -R 777 sys-internal``` zmieniłem uprawnienia dla wszystkich plików. W ten sposób zdobyłem kolejną flage.
 
 ![UPs...](/screens/v_pytanie_chatgpt_o_pobieranie_przez_rsync.gif)
-
+```
 Ja:
 jak za pomocą polecenia rsync pobrać katalog?
 
@@ -329,9 +329,10 @@ Aby pobrać katalog za pomocą polecenia rsync, wykonaj następujące kroki:
 Otwórz terminal lub konsolę.
 
 Wpisz polecenie rsync, a następnie podaj lokalizację źródłową i docelową. Na przykład, jeśli chcesz pobrać katalog o nazwie "folder" z serwera zdalnego do bieżącego katalogu lokalnego, wpisz:
-
+```
 ```
 rsync -avz username@remote_host:/path/to/folder/ .
+```
 ```
 W powyższym poleceniu:
 -a oznacza tryb archiwum, co oznacza, że ​​rsync będzie zachowywał właściwości plików, takie jak uprawnienia, daty itp.
@@ -347,6 +348,7 @@ Wpisz hasło, jeśli zostaniesz o to poproszony, aby potwierdzić swoją tożsam
 
 Po wykonaniu powyższych kroków, rsync pobierze katalog z serwera zdalnego do bieżącego katalogu lokalnego.
 
+```
 ```                              
 ┌──(kali㉿kali)-[~/Desktop/TryHackMe/VulnNe_Internal]
 └─$ rsync --list-only rsync://rsync-connect@<IP_atakowanej_masz>/files/sys-internal
@@ -548,13 +550,15 @@ sys-internal@vulnnet-internal:/TeamCity$ grep -iR token /TeamCity/logs/ 2>/dev/n
 ```
 ![...](/screens/v_token_tc.png)
 
+
+    Uwaga: ten token będzie dla Ciebie inny i zmienia się przy każdym ponownym uruchomieniu komputera.
+
+
 6. Za pomocą przekierowania ```ssh``` poleceniem ```ssh -i id_rsa -L 4444:localhost:8111 sys-internal@<IP_atakowanej_maszyny>``` przekierowałem pracę "lokalnego hosta" atakowanej maszyny na stój lokalny host.
 
 ![Oops!…I_Did_It_Again](/screens/v_przekierowanie_ssh.png)
 
 Następnie w przeglądarce ppisuję ```http://127.0.0.1:4444/``` i pojawia się możliwość logowania. Zauwarzam możliwość logowania za pomocą użytkownika ```superuser```, tam wykorzystuję znaleziony wcześniej ```token``` w pliku ```catalina.out``` w katalogu ```/TeamCity/log```.
-
-    Uwaga: ten token będzie dla Ciebie inny i zmienia się przy każdym ponownym uruchomieniu komputera.
 
 Następnie tworze nowy projetk. Po stworzeniu go szukam możliwości wykonania kodu, rozgladając się po ```stettings```, zamykając projekt i potwierając go z zakładki górnrj ```Projects``` znajduję poszukiwaną możliwość w zakładce bocznej ```Build Steps```. Dzieki narzędziu [revshells.com](https://www.revshells.com/) stworzyłem kod zwracający mi odwróconą powłokę z możliwością wejścia do katalogu ```root``` tam znajduje się flaga ```root.txt```.
 
