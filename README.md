@@ -588,3 +588,6 @@ THM{e8996faea46df09dba5676dd271c60bd}
 ```
 
 ![FINISH_HIM](/screens/v_final.png)
+
+## [Raport:](/Podsumowanie%20wykonanych%20prac.doc)
+
